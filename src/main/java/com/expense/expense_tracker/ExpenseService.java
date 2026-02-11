@@ -26,7 +26,7 @@ public class ExpenseService {
         repository.deleteById(id);
     }
 
-    public double getExpenses() {
+    public double getTotalExpenses() {
         return repository.findAll().stream()
                 .mapToDouble(Expense::getAmount)
                 .sum();

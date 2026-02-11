@@ -24,7 +24,7 @@ public class WebController {
 
         model.addAttribute("listExpenses", service.getExpenses());
         model.addAttribute("totalExpenses", total);
-        model.addAttribute("remBudget", budget - total);
+        model.addAttribute("remainingBudget", budget - total);
         return "index";
     }
 
