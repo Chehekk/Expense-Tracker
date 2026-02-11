@@ -1,7 +1,6 @@
 # 💰 Personal Expense Tracker Dashboard
 
-![Dashboard Preview] <img width="1000" height="887" alt="image" src="https://github.com/user-attachments/assets/881c3d1f-35dd-486b-bab5-28560e8d6a49" />
-
+![Dashboard Preview] 
 
 A full-stack Spring Boot application that provides real-time financial tracking with a dynamic visual dashboard.
 
