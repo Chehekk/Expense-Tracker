@@ -16,14 +16,14 @@
         <div class="col-md-6">
             <div class="card p-3 shadow-sm dashboard-card bg-white">
                 <h5>Total Spent</h5>
-                <h3 class="text-danger" th:text="'$' + ${totalExpenses}">$0.00</h3>
+                <h3 class="text-danger" th:text="'₹' + ${totalExpenses}">₹0.00</h3>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card p-3 shadow-sm dashboard-card bg-white">
                 <h5>Remaining Budget</h5>
                 <h3 th:class="${remBudget < 0 ? 'text-danger' : 'text-success'}" 
-                    th:text="'$' + ${remainingBudget}">$0.00</h3>
+                    th:text="'₹' + ${remBudget}">₹0.00</h3>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
         <tbody>
             <tr th:each="expense : ${listExpenses}">
                 <td th:text="${expense.title}"></td>
-                <td th:text="'$' + ${expense.amount}"></td>
+                <td th:text="'₹' + ${expense.amount}"></td>
                 <td><span class="badge bg-info text-dark" th:text="${expense.category}"></span></td>
                 <td th:text="${expense.date}"></td>
                 <td>

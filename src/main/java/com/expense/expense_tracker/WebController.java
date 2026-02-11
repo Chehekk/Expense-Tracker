@@ -20,7 +20,7 @@ public class WebController {
     @GetMapping("/")
     public String viewHomePage(Model model) {
         double total = service.getTotalExpenses();
-        double budget = 6000.0;
+        double budget = 50000.0;
 
         model.addAttribute("listExpenses", service.getExpenses());
         model.addAttribute("totalExpenses", total);
