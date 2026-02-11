@@ -22,8 +22,8 @@
         <div class="col-md-6">
             <div class="card p-3 shadow-sm dashboard-card bg-white">
                 <h5>Remaining Budget</h5>
-                <h3 th:class="${remBudget < 0 ? 'text-danger' : 'text-success'}" 
-                    th:text="'₹' + ${remBudget}">₹0.00</h3>
+                <h3 th:class="${remainingBudget < 0 ? 'text-danger' : 'text-success'}" 
+                    th:text="'₹' + ${remainingBudget}">Rs 0.00</h3>
             </div>
         </div>
     </div>
