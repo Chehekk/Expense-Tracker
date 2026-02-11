@@ -6,7 +6,27 @@
 </head>
 <body class="container mt-5">
     <h2 class="text-center mb-4">Personal Expense Tracker</h2>
-    
+
+    <div class="card card-body mb-4 shadow-sm">
+        <form th:action="@{/save}" method="POST" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="title" class="form-control" placeholder="Item Name" required>
+            </div>
+            <div class="col-md-2">
+                <input type="number" step="0.01" name="amount" class="form-control" placeholder="Amoount" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="category" class="form-control" placeholder="Category">
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="date" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Add</button>
+            </div>
+        </form>
+    </div>
+
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
             <tr>
