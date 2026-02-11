@@ -34,7 +34,9 @@
                 <th>Amount</th>
                 <th>Category</th>
                 <th>Date</th>
+                <th>Actions</th>
             </tr>
+
         </thead>
         <tbody>
             <tr th:each="expense : ${listExpenses}">
@@ -42,6 +44,12 @@
                 <td th:text="${expense.amount}">0.00</td>
                 <td th:text="${expense.category}">Category</td>
                 <td th:text="${expense.date}">2026-01-01</td>
+                <td>
+                    <a th:href="@{/delete/{id}(id=${expense.id})}"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure?')"> Delete
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

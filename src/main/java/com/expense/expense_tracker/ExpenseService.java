@@ -21,4 +21,8 @@ public class ExpenseService {
     public Expense saveExpense(Expense expense) {
         return repository.save(expense);
     }
+
+    public void deleteExpense(Long id) {
+        repository.deleteById(id);
+    }
 }
