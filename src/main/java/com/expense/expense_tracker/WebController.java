@@ -19,7 +19,12 @@ public class WebController {
 
     @GetMapping("/")
     public String viewHomePage(Model model) {
+        double total = service.getTotalExpenses();
+        double budget = 6000.0;
+
         model.addAttribute("listExpenses", service.getExpenses());
+        model.addAttribute("totalExpenses", total);
+        model.addAttribute("remBudget", budget - total);
         return "index";
     }
 
@@ -35,4 +40,6 @@ public class WebController {
         service.saveExpense(expense);
         return "redirect:/"; //tells browser to refresh the page
     }
+
+    
 }

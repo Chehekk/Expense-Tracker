@@ -25,4 +25,10 @@ public class ExpenseService {
     public void deleteExpense(Long id) {
         repository.deleteById(id);
     }
+
+    public double getExpenses() {
+        return repository.findAll().stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
+    }
 }
