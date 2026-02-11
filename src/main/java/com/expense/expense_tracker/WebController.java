@@ -1,6 +1,5 @@
 package com.expense.expense_tracker;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,17 +21,29 @@ public class WebController {
     public String viewHomePage(Model model) {
         double total = service.getTotalExpenses();
         double budget = 6000.0;
+        double remaining = budget - total;
 
         model.addAttribute("listExpenses", service.getExpenses());
         model.addAttribute("totalExpenses", total);
-        model.addAttribute("remainingBudget", budget - total);
+        model.addAttribute("remainingBudget", remaining);
         model.addAttribute("categoryData", service.getCategoryTotals());
+
+        if(remaining < 0) {
+            model.addAttribute("Budget Warning", "You have spent more than your budget!");
+        }
+
         return "index";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteExpense(@PathVariable Long id) {
         service.deleteExpense(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/clear")
+    public String clearAll() {
+        service.getExpenses().clear(); // Or better: repository.deleteAll(); if using a DB
         return "redirect:/";
     }
     

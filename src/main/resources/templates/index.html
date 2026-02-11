@@ -1,69 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Expense Tracker</title>
+    <title>Expense Tracker | Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
     <style>
+        /* Modern Dark Theme Palette */
         body { 
             background-color: #1a1c2c; 
-            color: rgba(245, 245, 245, 0.705);
+            color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 50px;
         }
-        .dashboard-card { border-radius: 15px; border: none; color: rgba(199, 199, 199, 0.904)}
-        .table { background-color: rgb(233, 231, 231); border-radius: 10px; overflow: hidden;}
+
+        /* Custom color for Category Badges */
+        .bg-custom {
+            background-color: #1791a7 !important; /* Gold */
+            color: #ffffff !important;           /* Dark text for contrast */
+            font-weight: 600;
+        }
+        
+        /* Glassmorphism Effect for Cards */
+        .dashboard-card { 
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            color: #ffffff;
+            transition: transform 0.3s ease;
+        }
+        .dashboard-card:hover { transform: translateY(-5px); }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            color: #333;
+        }
+
+        .table-container {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 10px;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 { color: #ffd700; font-weight: 700; letter-spacing: 1px; }
+        .text-success { color: #2ecc71 !important; font-weight: bold; }
+        .text-danger { color: #e74c3c !important; font-weight: bold; }
+
+        /* Animation for the whole page */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-container, .form-card, .chart-container {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Specific delay for the table so it pops in after the cards */
+        .table-container {
+            animation-delay: 0.2s;
+        }
     </style>
 </head>
 <body class="container mt-5">
 
-    <h2 class="text-center mb-4">💰 Personal Expense Tracker</h2>
+    <h2 class="text-center mb-5">💰 Personal Expense Tracker</h2>
 
-    <div class="row mb-4 text-center">
-        <div class="col-md-6">
-            <div class="card p-3 shadow-sm dashboard-card bg-white">
-                <h5>Total Spent</h5>
-                <h3 class="text-danger" th:text="'₹' + ${totalExpenses}">₹0.00</h3>
+    <div class="row mb-5 text-center">
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card shadow">
+                <h5 class="text-white-50">Total Spent</h5>
+                <h2 class="text-danger" th:text="'₹' + ${totalExpenses}">₹0.00</h2>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card p-3 shadow-sm dashboard-card bg-white">
-                <h5>Remaining Budget</h5>
-                <h3 th:class="${remainingBudget < 0 ? 'text-danger' : 'text-success'}" 
-                    th:text="'₹' + ${remainingBudget}">Rs 0.00</h3>
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card shadow">
+                <h5 class="text-white-50">Remaining Budget</h5>
+                <h2 th:class="${remainingBudget < 0 ? 'text-danger' : 'text-success'}" 
+                    th:text="'₹' + ${remainingBudget}">₹0.00</h2>
             </div>
         </div>
     </div>
 
-    <div class="card card-body mb-4 shadow-sm">
-        <table class="table table-hover mb-0"></table>
-            <div class="card card-body shadow-sm mt-4 mb-5">
-                <h4 class="text-center mb-3" style="color: #1a1c2c;">Spending by Category</h4>
-                <div style="max-width: 300px; margin: 0 auto;">
-                    <canvas id="expenseChart"></canvas>
-                </div>
-            </div>
-
-            <script th:inline="javascript">
-                /* Get the data from Java/Thymeleaf */
-                const categoryData = [[${categoryData}]]; 
-                
-                const ctx = document.getElementById('expenseChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'doughnut', // 'doughnut' looks cleaner than a full pie
-                    data: {
-                        labels: Object.keys(categoryData),
-                        datasets: [{
-                            data: Object.values(categoryData),
-                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            legend: { position: 'bottom' }
-                        }
-                    }
-                });
-            </script>
-
+    <div class="form-card shadow mb-5">
+        <h5 class="mb-3">Add New Expense</h5>
         <form th:action="@{/save}" method="POST" class="row g-3">
             <div class="col-md-3">
                 <input type="text" name="title" class="form-control" placeholder="Item Name" required>
@@ -73,44 +113,119 @@
             </div>
             <div class="col-md-3">
                 <select name="category" class="form-select">
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Bills">Bills</option>
-                    <option value="Entertainment">Entertainment</option>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Shopping">🛍️ Shopping</option>
+                    <option value="Bills">🧾 Bills</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <input type="date" name="date" class="form-control" required>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Add</button>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">Add</button>
+                <a th:href="@{/clear}" class="btn btn-outline-warning" onclick="return confirm('Clear all data?')">Reset</a>
             </div>
         </form>
     </div>
 
-    <table class="table table-hover bg-white shadow-sm rounded">
-        <thead class="table-dark">
-            <tr>
-                <th>Title</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="expense : ${listExpenses}">
-                <td th:text="${expense.title}"></td>
-                <td th:text="'₹' + ${expense.amount}"></td>
-                <td><span class="badge bg-info text-dark" th:text="${expense.category}"></span></td>
-                <td th:text="${expense.date}"></td>
-                <td>
-                    <a th:href="@{/delete/{id}(id=${expense.id})}" class="btn btn-outline-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container shadow mb-5">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+           <tbody>
+                <tr th:each="expense : ${listExpenses}">
+                    <td class="fw-bold" th:text="${expense.title}"></td>
+                    <td th:text="'₹' + ${expense.amount}"></td>
+                    
+                    <td><span class="badge bg-custom" th:text="${expense.category}"></span></td>
+                    
+                    <td th:text="${#temporals.format(expense.date, 'dd-mm-yyyy')}"></td>
+                    
+                    <td class="text-center">
+                        <a th:href="@{/delete/{id}(id=${expense.id})}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
+    <div class="chart-container shadow text-center">
+        <h4 class="mb-4">Spending Distribution</h4>
+        <div style="position: relative; height:350px; width:350px; margin: 0 auto;">
+            <canvas id="expenseChart"></canvas>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        window.onload = function() {
+            const categoryData = /*[[${categoryData}]]*/ {}; 
+            
+            if (!categoryData || Object.keys(categoryData).length === 0) return;
+
+            // Register the plugin to show percentages
+            Chart.register(ChartDataLabels);
+
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const totalSum = Object.values(categoryData).reduce((a, b) => a + b, 0);
+
+            const sliceColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(categoryData),
+                    datasets: [{
+                        data: Object.values(categoryData),
+                        backgroundColor: sliceColors,
+                        hoverBackgroundColor: sliceColors,
+                        borderWidth: 2,
+                        borderColor: '#1a1c2c',
+                        // --- THIS MAKES IT POP ON HOVER ---
+                        hoverOffset: 30 
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutBack', // Gives it that "bouncy" feel
+                        animateRotate: true,
+                        animateScale: true
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#ffffff', font: { size: 14 } }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: (value, ctx) => {
+                                let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                return (value * 100 / sum).toFixed(1) + "%";
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+
+    <script th:if="${budgetWarning}" th:inline="javascript">
+        /*<![CDATA[*/
+        // The IDE sees a string, but Thymeleaf replaces it with the actual warning
+        var message = /*[[${budgetWarning}]]*/ "default warning";
+        alert(message);
+        /*]]>*/
+    </script>
 </body>
 </html>

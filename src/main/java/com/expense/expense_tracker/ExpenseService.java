@@ -1,6 +1,6 @@
 package com.expense.expense_tracker;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +39,5 @@ public class ExpenseService {
                 Expense::getCategory,
                 Collectors.summingDouble(Expense::getAmount)
             ));
+    }
 }
