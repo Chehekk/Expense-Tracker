@@ -1,5 +1,6 @@
 package com.expense.expense_tracker;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +21,12 @@ public class WebController {
     @GetMapping("/")
     public String viewHomePage(Model model) {
         double total = service.getTotalExpenses();
-        double budget = 50000.0;
+        double budget = 6000.0;
 
         model.addAttribute("listExpenses", service.getExpenses());
         model.addAttribute("totalExpenses", total);
         model.addAttribute("remainingBudget", budget - total);
+        model.addAttribute("categoryData", service.getCategoryTotals());
         return "index";
     }
 

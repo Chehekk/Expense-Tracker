@@ -34,6 +34,36 @@
 
     <div class="card card-body mb-4 shadow-sm">
         <table class="table table-hover mb-0"></table>
+            <div class="card card-body shadow-sm mt-4 mb-5">
+                <h4 class="text-center mb-3" style="color: #1a1c2c;">Spending by Category</h4>
+                <div style="max-width: 300px; margin: 0 auto;">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                /* Get the data from Java/Thymeleaf */
+                const categoryData = [[${categoryData}]]; 
+                
+                const ctx = document.getElementById('expenseChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut', // 'doughnut' looks cleaner than a full pie
+                    data: {
+                        labels: Object.keys(categoryData),
+                        datasets: [{
+                            data: Object.values(categoryData),
+                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            </script>
+
         <form th:action="@{/save}" method="POST" class="row g-3">
             <div class="col-md-3">
                 <input type="text" name="title" class="form-control" placeholder="Item Name" required>
