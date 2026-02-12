@@ -11,6 +11,6 @@ A full-stack Spring Boot application that provides real-time financial tracking 
 * **Data Management**: CRUD operations handled via Spring Data JPA with automatic category-wise aggregation for data visualization.
 
 ## 🛠️ Tech Stack
-* **Backend**: Java 17, Spring Boot, Spring Data JPA
+* **Backend**: Java 21, Spring Boot, Spring Data JPA
 * **Frontend**: Thymeleaf, JavaScript (ES6), Bootstrap 5, Chart.js
 * **Database**: H2/MySQL
