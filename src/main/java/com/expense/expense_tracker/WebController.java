@@ -29,7 +29,7 @@ public class WebController {
         model.addAttribute("categoryData", service.getCategoryTotals());
 
         if(remaining < 0) {
-            model.addAttribute("Budget Warning", "You have spent more than your budget!");
+            model.addAttribute("budgetWarning", "You have spent more than your budget!");
         }
 
         return "index";

@@ -222,9 +222,9 @@
 
     <script th:if="${budgetWarning}" th:inline="javascript">
         /*<![CDATA[*/
-        // The IDE sees a string, but Thymeleaf replaces it with the actual warning
-        var message = /*[[${budgetWarning}]]*/ "default warning";
-        alert(message);
+            // VS Code sees a safe string, but Thymeleaf replaces it with the real warning
+            const msg = /*[[${budgetWarning}]]*/ "default";
+            alert(msg);
         /*]]>*/
     </script>
 </body>
