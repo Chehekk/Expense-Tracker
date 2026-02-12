@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker | Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,8 +18,8 @@
 
         /* Custom color for Category Badges */
         .bg-custom {
-            background-color: #1791a7 !important; /* Gold */
-            color: #ffffff !important;           /* Dark text for contrast */
+            background-color: #1791a7 !important; 
+            color: #ffffff !important;           
             font-weight: 600;
         }
         
@@ -76,7 +77,6 @@
             animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        /* Specific delay for the table so it pops in after the cards */
         .table-container {
             animation-delay: 0.2s;
         }
@@ -131,53 +131,51 @@
     </div>
 
     <div class="table-container shadow mb-5">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-dark">
-                <tr>
-                    <th>Title</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-           <tbody>
-                <tr th:each="expense : ${listExpenses}">
-                    <td class="fw-bold" th:text="${expense.title}"></td>
-                    <td th:text="'₹' + ${expense.amount}"></td>
-                    
-                    <td><span class="badge bg-custom" th:text="${expense.category}"></span></td>
-                    
-                    <td th:text="${#temporals.format(expense.date, 'dd-mm-yyyy')}"></td>
-                    
-                    <td class="text-center">
-                        <a th:href="@{/delete/{id}(id=${expense.id})}" class="btn btn-sm btn-outline-danger">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="expense : ${listExpenses}">
+                        <td class="fw-bold" th:text="${expense.title}"></td>
+                        <td th:text="'₹' + ${expense.amount}"></td>
+                        <td><span class="badge bg-custom" th:text="${expense.category}"></span></td>
+                        <td th:text="${#temporals.format(expense.date, 'dd-MM-yyyy')}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/delete/{id}(id=${expense.id})}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="chart-container shadow text-center">
         <h4 class="mb-4">Spending Distribution</h4>
-        <div style="position: relative; height:350px; width:350px; margin: 0 auto;">
+        <div style="position: relative; height:40vh; width:100%; max-width: 400px; margin: 0 auto;">
             <canvas id="expenseChart"></canvas>
         </div>
     </div>
 
     <script th:inline="javascript">
+        /*<![CDATA[*/
         window.onload = function() {
             const categoryData = /*[[${categoryData}]]*/ {}; 
             
             if (!categoryData || Object.keys(categoryData).length === 0) return;
 
-            // Register the plugin to show percentages
             Chart.register(ChartDataLabels);
 
             const ctx = document.getElementById('expenseChart').getContext('2d');
-            const totalSum = Object.values(categoryData).reduce((a, b) => a + b, 0);
-
             const sliceColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -188,7 +186,6 @@
                         hoverBackgroundColor: sliceColors,
                         borderWidth: 2,
                         borderColor: '#1a1c2c',
-                        // --- THIS MAKES IT POP ON HOVER ---
                         hoverOffset: 30 
                     }]
                 },
@@ -197,7 +194,7 @@
                     maintainAspectRatio: false,
                     animation: {
                         duration: 1500,
-                        easing: 'easeOutBack', // Gives it that "bouncy" feel
+                        easing: 'easeOutBack',
                         animateRotate: true,
                         animateScale: true
                     },
@@ -218,11 +215,11 @@
                 }
             });
         };
+        /*]]>*/
     </script>
 
     <script th:if="${budgetWarning}" th:inline="javascript">
         /*<![CDATA[*/
-            // VS Code sees a safe string, but Thymeleaf replaces it with the real warning
             const msg = /*[[${budgetWarning}]]*/ "default";
             alert(msg);
         /*]]>*/
